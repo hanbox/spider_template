@@ -1,0 +1,58 @@
+{
+    "template_name": "test1",
+    "start_urls": [
+        {
+            "url": "http://www.pengfu.com/xiaohua_1.html",
+            "cookies": "",
+            "domain": [
+                "http://www.pengfu.com"
+            ]
+        }
+    ],
+    "loop_rules": [
+        {
+            "type": "css",
+            "rule": "div.page div a.on::attr(href)"
+        }
+    ],
+    "extract_rules": {
+        "list_rule": {
+            "type": "css",
+            "rule": "div.list-item"
+        },
+        "item_rules": [
+            {
+                "field": "title",
+                "rule": {
+                    "type": "css",
+                    "rule": "h1.dp-b a::text"
+                },
+                "url_rule": {
+                    "type": "css",
+                    "rule": "h1.dp-b a::attr(href)",
+                    "isRec": false
+                },
+                "isTrim": true,
+                "depth_rule": ""
+            },
+            {
+                "field": "data",
+                "rule": {
+                    "type": "css",
+                    "rule": "div.content-img::text"
+                },
+                "url_rule": {
+                    "type": "css",
+                    "rule": "h1.dp-b a::attr(href)",
+                    "isRec": false
+                },
+                "isTrim": true,
+                "depth_rule": ""
+            }
+        ]
+    },
+    "other_setting": {
+        "concurrent_requests": 100,
+        "download_delay": 1
+    }
+}
