@@ -31,3 +31,22 @@ class SpiderTemplatePipeline_JSON(object):
             line = json.dumps(dict(item)) + "\n"
             self.file.write(line.decode("unicode_escape"))
             return item
+
+class myImagesPipeline(FilesPipeline):
+    def file_path(self, request, response=None, info=None):  
+        image_guid = request.url.split('/')[-1]  
+        return 'spider_funpic/file/full/%s' % (image_guid)  
+
+    def get_media_requests(self, item, info):   
+        if item['data_type'] == 'funpics':
+            for image_url in item['image_paths']:
+                yield Request(image_url)
+
+    def item_completed(self, results, item, info):
+        if item['data_type'] == 'jokes':
+            return item   
+        image_paths = [x['path'] for ok, x in results if ok]
+        if not image_paths:
+            raise DropItem("Item contains no images")
+        item['image_paths'] = image_paths[0]
+        return item

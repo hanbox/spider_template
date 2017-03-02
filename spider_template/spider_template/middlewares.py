@@ -7,7 +7,16 @@
 import json
 import logging
 import settings
+from user_agents import agents
 from scrapy import signals
+from scrapy.conf import settings
+
+class UserAgentMiddleware(object):
+    """ 换User-Agent """
+
+    def process_request(self, request, spider):
+        agent = random.choice(agents)
+        request.headers["User-Agent"] = agent
 
 class SpiderTemplateSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -20,7 +29,6 @@ class SpiderTemplateSpiderMiddleware(object):
     @classmethod
     def from_crawler(cls, crawler):
         # This method is used by Scrapy to create your spiders.
-        print '********** from_crawler ***********'
         s = cls()
 
         #load config
@@ -34,11 +42,15 @@ class SpiderTemplateSpiderMiddleware(object):
     def spider_opened(self, spider):
         spider.name = self.SETTING_JSON['template_name']
         spider.start_urls = self.SETTING_JSON['start_urls']
-        spider.loop_rules = self.SETTING_JSON['loop_rules']
         spider.extract_rules = self.SETTING_JSON['extract_rules']
 
         #other setting
-        settings.CONCURRENT_REQUESTS = self.SETTING_JSON['other_setting']['concurrent_requests']
-        settings.DOWNLOAD_DELAY = self.SETTING_JSON['other_setting']['download_delay']
+        # spider.settings['DOWNLOAD_DELAY'] = self.SETTING_JSON['other_setting']['download_delay']
+        # spider.settings.set('CONCURRENT_REQUESTS',self.SETTING_JSON['other_setting']['concurrent_requests'])
+        # spider.settings.set('DOWNLOAD_DELAY',int(self.SETTING_JSON['other_setting']['download_delay']))
+
+        print '*************'
+        print spider.settings['DOWNLOAD_DELAY']
+        print type(spider.settings['DOWNLOAD_DELAY'])
         
         spider.logger.info('Spider opened: %s' % spider.name)

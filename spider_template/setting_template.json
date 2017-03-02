@@ -9,50 +9,72 @@
             ]
         }
     ],
-    "loop_rules": [
-        {
-            "type": "css",
-            "rule": "div.page div a.on::attr(href)"
-        }
-    ],
     "extract_rules": {
         "list_rule": {
             "type": "css",
             "rule": "div.list-item"
         },
+        "loop_rules": [
+            {
+                "type": "css",
+                "rule": "div.page div a.on::attr(href)"
+            }
+        ],
         "item_rules": [
             {
                 "field": "title",
                 "rule": {
                     "type": "css",
-                    "rule": "h1.dp-b a::text"
+                    "rule": "h1.dp-b a::text",
+                    "isTrim": true
                 },
                 "url_rule": {
                     "type": "css",
                     "rule": "h1.dp-b a::attr(href)",
-                    "isRec": false
+                    "isRec": true
                 },
-                "isTrim": true,
-                "depth_rule": ""
+                "depth_rule": {
+                    "list_rule": {},
+                    "loop_rules": [],
+                    "item_rules": [
+                        {
+                            "field": "user",
+                            "rule": {
+                                "type": "css",
+                                "rule": "p.user_name_list a::text",
+                                "isTrim": true
+                            },
+                            "url_rule": {
+                                "type": "css",
+                                "rule": "p.user_name_list a::attr(href)",
+                                "isRec": false
+                            },
+                            "depth_rule": {  
+                            }
+                        }
+                    ]
+                }
             },
             {
                 "field": "data",
                 "rule": {
                     "type": "css",
-                    "rule": "div.content-img::text"
+                    "rule": "div.content-img::text",
+                    "isTrim": true
                 },
                 "url_rule": {
-                    "type": "css",
-                    "rule": "h1.dp-b a::attr(href)",
+                    "type": "",
+                    "rule": "",
                     "isRec": false
                 },
-                "isTrim": true,
-                "depth_rule": ""
+                "depth_rule": {
+
+                }
             }
         ]
     },
     "other_setting": {
         "concurrent_requests": 100,
-        "download_delay": 1
+        "download_delay": 10
     }
 }
